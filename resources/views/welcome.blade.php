@@ -26,40 +26,40 @@
         </style>
     </head>
     <body class="antialiased">
-            <nav class="navbar navbar-expand-lg navbar-light bg-info">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Andre Website</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Login</a>
-                </li>
-            </div>
-        </div>
-    </nav>
-    
-    
-    <div class="container-xl">
-        <div class="card col-md-4 mt-5" style="margin: 0 auto;" id="login-page">
-            <div class="card-header">
-                <h1 class="text-center"><li class="fa-solid fa-user me-2"></li>Login</h1>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email address<span class="red-required">*</span></label>
-                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address">
-                    <div class="required-message">This field is required!</div>
-                <div class="mb-3">
-                    <label for="pwd" class="form-label">Password<span class="red-required">*</span></label>
-                    <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
-                    <div class="required-message">This field required 8 characters!</div>
+        {{-- Navbar --}}
+        <nav class="navbar navbar-expand-lg navbar-light bg-info">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Andre Website</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Login</a>
+                    </li>
                 </div>
-                <button type="submit" class="btn btn-primary col-md-12">Submit</button>
+            </div>
+        </nav>
+        {{-- Login --}}
+        <div class="container-xl">
+            <div class="card col-md-4 mt-5" style="margin: 0 auto;" id="login-page">
+                <div class="card-header">
+                    <h1 class="text-center"><li class="fa-solid fa-user me-2"></li>Login</h1>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address<span class="red-required">*</span></label>
+                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address">
+                        <div class="required-message">This field is required!</div>
+                    <div class="mb-3">
+                        <label for="pwd" class="form-label">Password<span class="red-required">*</span></label>
+                        <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
+                        <div class="required-message">This field required 8 characters!</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary col-md-12">Submit</button>
+                </div>
             </div>
         </div>
-    </div>
     </body>
 </html>
