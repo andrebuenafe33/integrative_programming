@@ -44,22 +44,59 @@
         {{-- Login --}}
         <div class="container-xl">
             <div class="card col-md-4 mt-5" style="margin: 0 auto;" id="login-page">
-                <div class="card-header">
-                    <h1 class="text-center"><li class="fa-solid fa-user me-2"></li>Login</h1>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address<span class="red-required">*</span></label>
-                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address">
-                        <div class="required-message">This field is required!</div>
-                    <div class="mb-3">
-                        <label for="pwd" class="form-label">Password<span class="red-required">*</span></label>
-                        <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
-                        <div class="required-message">This field required 8 characters!</div>
+                <form class="login-form">
+                    <div class="card-header">
+                        <h1 class="text-center"><li class="fa-solid fa-user me-2"></li>Login</h1>
                     </div>
-                    <button type="submit" class="btn btn-primary col-md-12">Submit</button>
-                </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address<span class="red-required">*</span></label>
+                            <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address">
+                            <div class="required-message">This field is required!</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="pwd" class="form-label">Password<span class="red-required">*</span></label>
+                            <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
+                            <div class="required-message">This field required 8 characters!</div>
+                        </div>
+                        <div id="message" class="text-danger mb-3 hidden">
+                            show message
+                        </div>
+                        <button type="submit" class="btn btn-primary col-md-12">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('.login-form').addEventListener('submit', function(event){
+                    event.prevendDefault();
+
+                    const formData = new FormData(this);
+
+                    fetch('/welcome',{
+                        method: 'POST',
+                        body: formData,
+                        headers:{
+                            Accept: 'application/json',
+                        }
+                    }).then(res => {
+                        console.log(res);
+                        return res.json();
+                    }).then(res => {
+                        console.log(res);
+                        if(res.access_token) {
+                            localStorage.setItem('accessToken', res.access_token);
+                            window.location.href = '/users';
+                        }else{
+                            let messageDiv = document.getElementById('message');
+                            messageDiv.innerHtml = res.message;
+                            messageDiv.style = 'display:block';
+                        }
+                    })
+                });
+            })
+        </script>
     </body>
 </html>
