@@ -24,8 +24,12 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/default.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
 </head>
 
 <body class="antialiased">
@@ -49,7 +53,7 @@
         </div>
     </div> --}}
 
-    <nav class="navbar navbar-expand-lg" style="background-color: #313934">
+    <nav class="navbar navbar-expand-lg bg-dark static-top">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" style="color: white">Andre Website</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -58,22 +62,27 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" style="color: azure">
-                            <i class="bi bi-person-fill"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            {{-- <li><a class="dropdown-item" href="#">Profile</a></li> --}}
-                            <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
 
-        </div>
+            <li class="nav-item dropdown no-arrow">
+
+                <a class="nav-link dropdown-toggle" style="text-decoration: none; color:black;" href="#"
+                    id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="mr-2 d-none d-lg-inline text-white-900 small">Admin</span>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Logout
+                    </a>
+                </div>
+            </li>
+
     </nav>
 
     <div class="wrapper">
@@ -119,6 +128,7 @@
         </div>
     </div>
 
+    @include('admin.users.partials._logout-modal')
     <script src="{{ asset('js/dashboard.js') }}"></script>
 </body>
 

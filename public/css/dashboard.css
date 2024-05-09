@@ -172,7 +172,7 @@ a.sidebar-link:hover {
 
 .navbar {
     /* background-color: #f5f5f5; */
-    background: linear-gradient(to right, black, red, violet);
+    background: linear-gradient(to right, black, red, white, violet);
     box-shadow: 0 0 2rem 0 rgba(33, 37, 41, .1);
 }
 
@@ -186,8 +186,13 @@ a.sidebar-link:hover {
 }
 
 .footer {
-    background: linear-gradient(to right, black, red, violet);
+    background: linear-gradient(to right, black, red, white, violet);
 }
 
 
 @media (min-width: 768px) {}
+
+/* .sidebar-divider{
+ width: 5px;
+ background-color: black;   
+} */

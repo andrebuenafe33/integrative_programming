@@ -29,7 +29,7 @@
 
 <body class="antialiased">
     {{-- Navbar --}}
-    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+    <nav class="navbar navbar-expand-lg navbar-light bg-info" id="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Andre Website</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -37,12 +37,12 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {{-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Login</a>
                     </li>
-            </div>
+            </div> --}}
         </div>
     </nav>
     {{-- Login --}}

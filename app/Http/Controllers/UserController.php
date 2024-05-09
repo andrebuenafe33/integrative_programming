@@ -17,6 +17,11 @@ class UserController extends Controller
         return view('admin.users.index');
     }
 
+    public function create()
+    {
+        return view('admin.users.create');
+    }
+
     public function login(Request $request)
     {
         try {
@@ -56,7 +61,12 @@ class UserController extends Controller
         }
     }
 
+    public function logout(Request $request)
+    {
+        Auth::logout();
 
+        return redirect('/')->with('success', 'Logged out successfully!');
+    }
 
     public function list()
     {

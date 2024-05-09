@@ -16,3 +16,7 @@
 .form-control:focus + .required-message {
     display: block;
 }
+
+#navbar{
+    background: linear-gradient(to right, white, black, red);
+}
