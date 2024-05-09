@@ -19,14 +19,17 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'Admin',
+            'first_name' => 'Andre',
+            'middle_name' => 'Gloria',
+            'last_name' => 'Buenafe',
+            'address' => 'Brgy.Kangha-as',
+            'phone' => '09107590281',
             'email' => 'Admin@example.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('admin231'), 
+            'password' => Hash::make('admin231'),
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
     }
 }
