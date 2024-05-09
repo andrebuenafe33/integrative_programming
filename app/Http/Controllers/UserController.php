@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+    public function index()
+    {
+        return view('admin.users.index');
+    }
+
     public function login(Request $request)
     {
         try {
