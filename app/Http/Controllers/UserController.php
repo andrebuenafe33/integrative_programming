@@ -40,7 +40,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User logged in successfully',
-                'redirect' => route('dashboard'), // Redirect to admin dashboard
+                'redirect' => route('dashboard'), // this redirect to admin dashboard
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([

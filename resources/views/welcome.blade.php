@@ -79,14 +79,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.login-form').addEventListener('submit', function(event) {
-                event.prevendDefault();
+                event.preventDefault();
 
                 let email = document.getElementById('email').value
                 let password = document.getElementById('password').value
 
-                // const formData = new FormData(this);
-
-                fetch('/api/login   ', {
+                fetch('http://127.0.0.1:8000/api/login', {
                     method: 'POST',
                     body: JSON.stringify({
                         email: email,
@@ -107,17 +105,8 @@
                     } else {
                         let messageDiv = document.getElementById('message');
                         messageDiv.innerHtml = res.message;
-                        messageDiv.style = 'display:block';
+                        messageDiv.style.display = 'block';
                     }
-                    // if (res.access_token) {
-                    //     localStorage.setItem('accessToken', res.access_token);
-                    //     window.location.href = '/users';
-                    // } else {
-                    //     let messageDiv = document.getElementById('message');
-                    //     messageDiv.innerHtml = res.message;
-                    //     messageDiv.style = 'display:block';
-                    // }
-
                 })
             });
         })
