@@ -22,5 +22,5 @@ Route::post('login', [UserController::class, 'login']);
 Route::middleware('auth:api')->group(function(){ 
    
 Route::post('/register', [UserController::class, 'createUser']);
-Route::get('/user-list', [UserController::class, 'list']);
+Route::get('/userList', [UserController::class, 'list']);
 });

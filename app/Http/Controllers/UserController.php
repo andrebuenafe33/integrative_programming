@@ -77,6 +77,11 @@ class UserController extends Controller
         return response()->json($users);
     }
 
+    public function profile()
+    {
+        return view('admin.users.profile.index');
+    }
+
     public function createUser(Request $request)
     {
         try {
@@ -99,7 +104,7 @@ class UserController extends Controller
             if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
+                    'message' => 'Create Failed!',
                     'errors' => $validateUser->errors()
                 ], 401);
             }
@@ -115,7 +120,7 @@ class UserController extends Controller
 
 
             ]);
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',

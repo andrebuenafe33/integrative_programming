@@ -6,10 +6,10 @@
                 Create New User</h1>
         </div>
         <div class="card-body">
-            <div  class="alert alert-danger" id="message" type="hidden">
-                Invalid Credentials!
+            <div id="message" class="text-danger mb-3 hidden">
+                Creation Failed!
             </div>
-            <form class="users-form">
+            <form data="formData" class="users-form">
                 <div class="row">
                     <div class="form-group mb-2 col-md-6 p-2">
                         <label for="first_name">First Name <span class="red-required">*</span></label>
@@ -77,9 +77,10 @@
                 let email = document.getElementById('email').value
                 let password = document.getElementById('password').value
 
-                fetch('http://127.0.0.1:8000/api/login', {
+                fetch('http://127.0.0.1:8000/api/register', {
                     method: 'POST',
-                    body: JSON.stringify({
+                    body:
+                    JSON.stringify({
                         firstname: firstname,
                         middlename: middlename,
                         lastname: lastname,
