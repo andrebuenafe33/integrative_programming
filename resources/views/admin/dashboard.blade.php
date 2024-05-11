@@ -30,6 +30,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        if(!token){
+          window.location.href = '/';
+        }
+        </script>
 </head>
 
 <body class="antialiased">
@@ -130,6 +136,13 @@
 
     @include('admin.users.partials._logout-modal')
     <script src="{{ asset('js/dashboard.js') }}"></script>
+    <script>
+        function logout(){
+           localStorage.removeItem('token');
+           window.location.href = '/'; 
+       }
+    </script>
+       
 </body>
 
 </html>

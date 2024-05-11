@@ -94,6 +94,7 @@
                     headers: {
                         Accept: 'application/json',
                         'Content-Type': 'application/json',
+                        Authorization: 'Bearer' + localStorage.getItem('token')
                     },
 
                 }).then(res => {
@@ -102,6 +103,7 @@
                 }).then(res => {
                     console.log(res);
                     if (res.status) {
+                        localStorage.setItem('token', 'res.token');
                         window.location.href = res.redirect;
                     } else {
                         let messageDiv = document.getElementById('message');

@@ -9,7 +9,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('logout', [UserController::class, 'logout'])->name('logout');
+// Route::post('logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('users', [UserController::class, 'index'])->name('users');
 Route::get('users/create', [UserController::class, 'create']);

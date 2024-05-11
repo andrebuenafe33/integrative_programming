@@ -46,11 +46,20 @@ class UserController extends Controller
                     'status' => false,
                     'message' => 'Invalid credentials',
                 ], 401);
-            }
 
+                // $user = User::where('email', $request->email)->first();
+
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'User Logged In Successfully',
+            //     'token' => $user->createToken("API TOKEN")->plainTextToken
+            // ], 200);
+            }
+            $token = auth()->user()->createToken('/login');
             return response()->json([
                 'status' => true,
                 'message' => 'User logged in successfully',
+                'token' => $token->accessToken,
                 'redirect' => route('dashboard'), // this redirect to admin dashboard
             ], 200);
         } catch (\Throwable $th) {
@@ -59,13 +68,6 @@ class UserController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::logout();
-
-        return redirect('/')->with('success', 'Logged out successfully!');
     }
 
     public function list()
