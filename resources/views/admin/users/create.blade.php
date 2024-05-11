@@ -6,6 +6,9 @@
                 Create New User</h1>
         </div>
         <div class="card-body">
+            <div  class="alert alert-danger" id="message" type="hidden">
+                Invalid Credentials!
+            </div>
             <form class="users-form">
                 <div class="row">
                     <div class="form-group mb-2 col-md-6 p-2">
@@ -60,4 +63,52 @@
         </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.users-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                let firstname = document.getElementById('first_name').value
+                let middlename = document.getElementById('middle_name').value
+                let lastname = document.getElementById('last_name').value
+                let address = document.getElementById('address').value
+                let phone = document.getElementById('phone').value
+                let email = document.getElementById('email').value
+                let password = document.getElementById('password').value
+
+                fetch('http://127.0.0.1:8000/api/login', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        firstname: firstname,
+                        middlename: middlename,
+                        lastname: lastname,
+                        address: address,
+                        phne: phone,
+                        email: email,
+                        password: password,
+                    }),
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer' + localStorage.getItem('token')
+                    },
+
+                }).then(res => {
+                    console.log(res);
+                    return res.json();
+                }).then(res => {
+                    console.log(res);
+                    if (res.status) {
+                        localStorage.setItem('token', 'res.token');
+                        window.location.href = res.redirect;
+                    } else {
+                        let messageDiv = document.getElementById('message');
+                        messageDiv.innerHtml = res.message;
+                        messageDiv.style.display = 'block';
+                    }
+                })
+            });
+        })
+    </script>
 @endsection
