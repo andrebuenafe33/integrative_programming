@@ -105,6 +105,7 @@
                     if (res.status) {
                         localStorage.setItem('token', 'res.token');
                         window.location.href = res.redirect;
+                        console.log(res.mail);
                     } else {
                         let messageDiv = document.getElementById('message');
                         messageDiv.innerHtml = res.message;

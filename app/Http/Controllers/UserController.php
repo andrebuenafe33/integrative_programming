@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserSenderMail;
 
 class UserController extends Controller
 {
@@ -46,14 +48,12 @@ class UserController extends Controller
                     'status' => false,
                     'message' => 'Invalid credentials',
                 ], 401);
+            
+            // // Mailtrap Email // 
+            // Mail::to('admin@example.com')
+            //     ->send(new UserSenderMail());
+            // // End of Mailtrap Email // 
 
-                // $user = User::where('email', $request->email)->first();
-
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'User Logged In Successfully',
-            //     'token' => $user->createToken("API TOKEN")->plainTextToken
-            // ], 200);
             }
             $token = auth()->user()->createToken('/login');
             return response()->json([
@@ -61,6 +61,8 @@ class UserController extends Controller
                 'message' => 'User logged in successfully',
                 'token' => $token->accessToken,
                 'redirect' => route('dashboard'), // this redirect to admin dashboard
+                // 'mail' =>  Mail::to('admin@example.com')
+                //         ->send(new UserSenderMail())
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
