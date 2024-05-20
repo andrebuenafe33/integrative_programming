@@ -48,7 +48,7 @@
             headers:{
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: 'Bearer' + localStorage.getItem('token')
+                Authorization: 'Bearer ' + localStorage.getItem('token')
             },
         }).then((res)=>{
             console.log(res);
@@ -64,7 +64,7 @@
                         "<td>" + res[i].phone + "</td>" +
                         "<td>" + res[i].email + "</td>" +
                         "<td>" + 
-                            "<a class='editUser btn btn-warning btn-sm' title='Edit Button'><i class='fa fa-solid fa-edit'>Edit</i></a>" +
+                            "<a href="/users/edit" class='editUser btn btn-warning btn-sm' title='Edit Button'><i class='fa fa-solid fa-edit'>Edit</i></a>" +
                             "<a class='deleteUser btn btn-danger btn-sm' title='Delete Button' ><i class='fa fa-solid fa-trash'>Delete</i></a>" +
                         "</td>" +
                     "</tr>";

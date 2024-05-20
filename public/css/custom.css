@@ -1,13 +1,13 @@
-#login-page{
+#login-page {
     box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
 
-.red-required{
+.red-required {
     color: red;
     margin-left: 5px;
 }
 
-.required-message{
+.required-message {
     display: none;
     color: red;
     font-size: 0.8em;
@@ -17,6 +17,6 @@
     display: block;
 }
 
-#navbar{
+#navbar {
     background: linear-gradient(to right, white, black, red);
 }

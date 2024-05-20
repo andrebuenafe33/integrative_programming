@@ -136,4 +136,70 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function updateUser(Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                    'firstname' => 'required',
+                    'lastname' => 'required',
+                    'middlename' => 'required',
+                    'address' => 'required',
+                    'phone' => 'required',
+                    'email' => 'required|email|unique:users,email,'.$user->id,
+                    'password' => 'required',
+                ]
+            );
+
+            if($validateUser->fails()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Update Failed!',
+                    'errors' => $validateUser->errors()
+                ], 422);
+            }
+
+            $user->update([
+                'first_name' => $request->firstname,
+                'last_name' => $request->lastname,
+                'middle_name' => $request->middlename,
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'User Updated Successfully',
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                'redirect' => route('dashboard'),
+                'user' => $user
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function editUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            return response()->json([
+                'status' => true,
+                'user' => $user,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -3,11 +3,11 @@
     <div class="card mt-2">
         <div class="card-header">
             <h1><i class="fa fa-solid fa-user"></i>
-                Create New User</h1>
+                Edit User</h1>
         </div>
         <div class="card-body">
             <div id="message" class="text-danger mb-3 hidden">
-                Creation Failed!
+                Edit Failed!
             </div>
             <form data="formData" class="users-form">
                 <div class="row">
@@ -66,20 +66,51 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+                let userId = "";
+
+                function fetchUserData(userId){
+                    fetch('http://127.0.0.1:8000/api/users/${userId}/edit')
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.status){
+                            let user = data.user;
+
+                            document.getElementById('first_name').value = user.first_name;
+                            document.getElementById('middle_name').value = user.middle_name;
+                            document.getElementById('last_name').value = user.last_name;
+                            document.getElementById('address').value = user.address;
+                            document.getElementById('phone').value = user.phone;
+                            document.getElementById('email').value = user.email;
+                        } else {
+                            console.error(data.message);
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+
+                // to check if editing
+                if(window.location.pathname.includes('/edit')){
+                    userId = window.location.pathname.spit('/').pop();
+                    fetchUserData(userId);
+                }
+
+                // form submit
+
             document.querySelector('.users-form').addEventListener('submit', function(event) {
                 event.preventDefault();
 
-                let firstname = document.getElementById('first_name').value
-                let middlename = document.getElementById('middle_name').value
-                let lastname = document.getElementById('last_name').value
-                let address = document.getElementById('address').value
-                let phone = document.getElementById('phone').value
-                let email = document.getElementById('email').value
-                let password = document.getElementById('password').value
+                let firstname = document.getElementById('first_name').value;
+                let middlename = document.getElementById('middle_name').value;
+                let lastname = document.getElementById('last_name').value;
+                let address = document.getElementById('address').value;
+                let phone = document.getElementById('phone').value;
+                let email = document.getElementById('email').value;
+                let password = document.getElementById('password').value;
 
-                fetch('http://127.0.0.1:8000/api/register', {
-                    method: 'POST',
-                    body:
+                fetch('http://127.0.0.1:8000/api/users/${userId}', {
+                    method: 'PUT',
+                    body: 
                     JSON.stringify({
                         firstname: firstname,
                         middlename: middlename,
@@ -87,29 +118,28 @@
                         address: address,
                         phone: phone,
                         email: email,
-                        password: password,
+                        password: password
                     }),
-                    headers: {
+                    headers:{
                         Accept: 'application/json',
                         'Content-Type': 'application/json',
-                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                        Authorization: 'Bearer ' + localStorage.getItem('token')                    
                     },
-
                 }).then(res => {
                     console.log(res);
                     return res.json();
-                }).then(res => {
+                }).then (res => {
                     console.log(res);
-                    if (res.status) {
-                        localStorage.setItem('token', 'res.token');
+                    if(res.status){
+                        localStorage.setItem('token', res.token);
                         window.location.href = res.redirect;
                     } else {
                         let messageDiv = document.getElementById('message');
-                        messageDiv.innerHtml = res.message;
+                        messageDiv.innerHTML = res.message;
                         messageDiv.style.display = 'block';
                     }
-                })
+                });
             });
-        })
+        });
     </script>
 @endsection
