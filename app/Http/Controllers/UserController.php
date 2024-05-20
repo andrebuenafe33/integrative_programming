@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
 use App\Mail\UserSenderMail;
 
 class UserController extends Controller
@@ -49,21 +50,95 @@ class UserController extends Controller
                     'message' => 'Invalid credentials',
                 ], 401);
             
-            // // Mailtrap Email // 
-            // Mail::to('admin@example.com')
-            //     ->send(new UserSenderMail());
-            // // End of Mailtrap Email // 
 
             }
-            $token = auth()->user()->createToken('/login');
+            $user = User::where('email', $request->email)->first();
+                if(empty($user)){
+                    return response()->json([
+                        'message' => '404 not found',
+                    ], 404);
+                }
+            if(!Hash::check($request->password, $user->password)){
+                return response()->json([
+                    'message' => 'Invalid Credentials',
+                ], 404);
+                $code = rand(100000, 99999);
+                $updateResult = $user->update([
+                    'opt_code' => $code,
+                ]);
+
+                // Semaphore //
+                Http::asForm()->post('https://api.semaphore.co/api/v4/messages', [
+                    'apikey' => env('SEMAPHORE_API_KEY'),
+                    'number' => '09945364846',
+                    'message' => 'This is you OTP Code'.$code,
+                ]);
+                // End of Semaphore // 
+
+                if($updateResult){
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'OTP Sent Successfully!',
+                        'code' => $code,
+                        'token' => $user->createToken("API TOKEN")->plainTextToken,
+                        'mail' =>  Mail::to('admin@example.com')->send(new UserSenderMail())  // Mailtrap Email // 
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Failed to Send OTP',
+                    ], 500);
+                }
+            }
+
+            // $token = auth()->user()->createToken('/login');
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'User logged in successfully',
+            //     'token' => $token->accessToken,
+            //     'redirect' => route('dashboard'), // this redirect to admin dashboard
+            //     // 'mail' =>  Mail::to('admin@example.com')
+            //     //         ->send(new UserSenderMail())
+            // ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function verifyOTP(Request $request)
+    {
+        try {
+            $validateOTP = Validator::make($request->all(), [
+                'otp_code' => 'required|digits:6'
+            ]);
+
+            if($validateOTP->failes()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation Error!',
+                    'errors' => $validateOTP->errors()
+                ], 401);
+            }
+
+            $user = User::where('otp_code', $request->otp_code)->first();
+            if(!$user){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid OTP',
+                ], 401);
+            }
+
+            $user->update(['otp_code' => null]);
             return response()->json([
                 'status' => true,
-                'message' => 'User logged in successfully',
-                'token' => $token->accessToken,
-                'redirect' => route('dashboard'), // this redirect to admin dashboard
-                // 'mail' =>  Mail::to('admin@example.com')
-                //         ->send(new UserSenderMail())
+                'message' => 'OTP Verified Successfully!',
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                'redirect' => route('dashboard')
             ], 200);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

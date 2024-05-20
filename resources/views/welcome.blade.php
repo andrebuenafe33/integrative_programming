@@ -46,7 +46,7 @@
         </div>
     </nav>
     {{-- Login --}}
-    <div class="container-xl">
+    <div class="container-xl" id="login-container">
         <div class="card col-md-4 mt-5" style="margin: 0 auto;" id="login-page">
             <form class="login-form">
                 <div class="card-header">
@@ -77,6 +77,25 @@
         </div>
     </div>
 
+    {{-- OTP Verification --}}
+    <div class="container-sm" id="otp-container">
+        <div class="card col-md-4 mt-5" style="margin: 0 auto; display:none;">
+                <h3 id="otpmessage">Enter OTP</h3>
+                <form id="otp-form">
+                    <div class="form-group">
+                        <label for="otp_code" class="form-label">OTP<span class="red-required">*</span></label>
+                        <input type="number" class="form-input" name="otp_code" id="otp_code" placeholder="Enter OTP Code" required>
+                        <div class="required-message">This field is required!</div>
+                    </div>
+                    <div id="otp-message" class="text-danger mb-3 hidden">
+                        Invalid OTP!
+                    </div>
+                    <button type="submit" class="form-button btn btn-primary cold-md-12">Verify OTP</button>
+                </form>
+        </div>
+    </div>
+    {{-- End of OTP Verification --}}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.login-form').addEventListener('submit', function(event) {
@@ -104,12 +123,41 @@
                     console.log(res);
                     if (res.status) {
                         localStorage.setItem('token', 'res.token');
-                        window.location.href = res.redirect;
-                        console.log(res.mail);
+                        document.getElementById('otp-container').style.display = 'block';
+                        document.getElementById('login-container').style.display = 'none';
+                        // window.location.href = res.redirect;
+                        // console.log(res.mail);
                     } else {
                         let messageDiv = document.getElementById('message');
-                        messageDiv.innerHtml = res.message;
+                        messageDiv.innerHTML = res.message;
                         messageDiv.style.display = 'block';
+                    }
+                })
+            });
+            document.getElementById('otp-form').addEventListener('submit', function(event){
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const accessToken = localStorage.getItem('token');
+
+                formData.append('token', accessToken); 
+
+                fetch('http://127.0.0.1:8000/api/verifyOTP', {
+                    method: 'POST',
+                    body: formData,
+                    headers:{
+                        Accept: 'application/json',
+                    }
+                }).then(res => {
+                    console.log(res);
+                    return res.json();
+                }).then(data => {
+                    if(data.message == 'OTP Verified Sucessfully!'){
+                        window.location.href = data.redirect;
+                    } else {
+                        let messageOTP = document.getElementById('otp-message');
+                        messageOTP.innerHTML = data.message
+                        messageOTP.style.display = 'block';
                     }
                 })
             });

@@ -27,5 +27,7 @@ Route::get('/users/{id}/edit', [UserController::class, 'editUser']);
 
 Route::get('/users/{id}', [UserController::class, 'updateUser']);
 
+Route::get('/verifyOTP', [UserController::class, 'verifyOTP']);
+
 Route::get('/userList', [UserController::class, 'list']);
 // });
