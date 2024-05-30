@@ -17,7 +17,7 @@ use App\Models\User;
 */
 
 
-Route::post('login', [UserController::class, 'login']);
+Route::post('/login', [UserController::class, 'login']);
 
 // Route::middleware('auth:api')->group(function(){ 
 
