@@ -65,7 +65,15 @@
         </div>
         </form>
     </div>
-
+    <script>
+        document.getElementById('phone').addEventListener('input', function(event) {
+            let input = event.target;
+            let value = input.value;
+            if (value.length > 11) {
+                input.value = value.slice(0, 11); 
+            }
+        });    
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.users-form').addEventListener('submit', function(event) {

@@ -8,7 +8,7 @@
                 <h2><i class="fa fa-user"></i> User Profile</h2>
             </div>
             <div>
-                <a href="#" class="btn btn-light btn-sm" onclick="history.back()"><i class="fa fa-chevron-left"></i> Back</a>
+                <a href="/dashboard" class="btn btn-light btn-sm"><i class="fa fa-chevron-left"></i> Back</a>
             </div>
         </div>
         <div class="card-body">
@@ -22,22 +22,22 @@
                     <input type="hidden" id="user_id" name="user_id" value="">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><strong>First Name:</strong> Andre</h6>
+                            <strong>First Name:</strong><h6 id="first_name"></h6>
                         </div>
                         <div class="col-md-6">
-                            <h6><strong>Middle Name:</strong> Gloria</h6>
+                            <strong>Middle Name:</strong><h6 id="middle_name"></h6>
                         </div>
                         <div class="col-md-6">
-                            <h6><strong>Last Name:</strong> Buenafe</h6>
+                            <strong>Last Name:</strong><h6 id="last_name"></h6>
                         </div>
                         <div class="col-md-6">
-                            <h6><strong>Phone:</strong> 09107590281</h6>
+                            <strong>Phone:</strong><h6 id="phone"></h6>
                         </div>
                         <div class="col-md-12">
-                            <h6><strong>Address:</strong> Brgy. Kangha-as Hilongos, Leyte</h6>
+                            <strong>Address:</strong><h6 id="address"></h6>
                         </div>
                         <div class="col-md-12">
-                            <h6><strong>Email:</strong> admin@example.com</h6>
+                            <strong>Email:</strong><h6 id="email"></h6>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
             let userId = getUserId();
 
                 function fetchUserData(userId){
-                    fetch('http://127.0.0.1:8000/api/users/' + userId)
+                    fetch('http://127.0.0.1:8000/api/get/users/' + userId)
                     .then(res => res.json())
                     .then(res => {
                         if(res.status){
@@ -89,6 +89,8 @@
                 }
                 return userId;
             }
+             // Set user_id input value
+            document.getElementById('user_id').value = getUserId();
         });
 </script>
 

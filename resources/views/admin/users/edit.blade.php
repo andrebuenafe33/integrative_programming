@@ -66,13 +66,21 @@
         </div>
         </form>
     </div>
-
+    <script>
+        document.getElementById('phone').addEventListener('input', function(event) {
+            let input = event.target;
+            let value = input.value;
+            if (value.length > 11) {
+                input.value = value.slice(0, 11); 
+            }
+        });    
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let userId = getUserId();
 
                 function fetchUserData(userId){
-                    fetch('http://127.0.0.1:8000/api/users/' + userId)
+                    fetch('http://127.0.0.1:8000/api/get/users/' + userId)
                     .then(res => res.json())
                     .then(res => {
                         if(res.status){

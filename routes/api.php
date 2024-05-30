@@ -24,7 +24,7 @@ Route::post('login', [UserController::class, 'login']);
 // User //
 Route::get('/userList', [UserController::class, 'list']);
 Route::post('/register', [UserController::class, 'createUser']);
-Route::get('/users/{id}', [UserController::class, 'getUserById']);
+Route::get('/get/users/{id}', [UserController::class, 'getUserById']);
 Route::put('/users/{id}', [UserController::class, 'updateUser']);
 Route::delete('/delete/users/{id}', [UserController::class, 'deleteUser']);
 
