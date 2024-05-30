@@ -69,7 +69,7 @@
                 let userId = "";
 
                 function fetchUserData(userId){
-                    fetch('http://127.0.0.1:8000/api/users/${userId}/edit')
+                    fetch('http://127.0.0.1:8000/api/users/' + userId)
                     .then(res => res.json())
                     .then(res => {
                         if(res.status){

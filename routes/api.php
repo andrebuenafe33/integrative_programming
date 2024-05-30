@@ -23,7 +23,7 @@ Route::post('login', [UserController::class, 'login']);
    
 Route::post('/register', [UserController::class, 'createUser']);
 
-Route::get('/users/{id}/edit', [UserController::class, 'edit']);
+Route::get('/users/{id}', [UserController::class, 'getUserById']);
 
 Route::get('/users/{id}', [UserController::class, 'updateUser']);
 
