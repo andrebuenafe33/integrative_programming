@@ -18,4 +18,5 @@ Route::get('users/{id}/edit', [UserController::class, 'edit']);
 // Route::get('register', [RegisterController::class, 'register'])->name('register');
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 Route::get('profile', [UserController::class, 'profile'])->name('profile');
