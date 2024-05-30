@@ -248,7 +248,7 @@ class UserController extends Controller
                 'status' => true,
                 'message' => 'User Updated Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
-                'redirect' => route('dashboard'),
+                'redirect' => route('users'),
                 'user' => $user
             ], 200);
         } catch (\Throwable $th) {
@@ -279,5 +279,24 @@ class UserController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function deleteUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'User Deleted Successfully!',
+                'reload' => route('users')
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }   
     }
 }

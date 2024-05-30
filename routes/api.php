@@ -20,14 +20,15 @@ use App\Models\User;
 Route::post('login', [UserController::class, 'login']);
 
 // Route::middleware('auth:api')->group(function(){ 
-   
+
+    // User //
+Route::get('/userList', [UserController::class, 'list']);
 Route::post('/register', [UserController::class, 'createUser']);
-
 Route::get('/users/{id}', [UserController::class, 'getUserById']);
-
-Route::get('/users/{id}', [UserController::class, 'updateUser']);
+Route::put('/users/{id}', [UserController::class, 'updateUser']);
+Route::delete('/delete/users/{id}', [UserController::class, 'deleteUser']);
 
 Route::post('/verifyOTP', [UserController::class, 'verifyOTP']);
 
-Route::get('/userList', [UserController::class, 'list']);
+
 // });

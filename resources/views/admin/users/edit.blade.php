@@ -10,6 +10,7 @@
                 Edit Failed!
             </div>
             <form data="formData" class="users-form">
+                <input type="hidden" id="user_id" name="user_id" value="{{ $user->id }}">
                 <div class="row">
                     <div class="form-group mb-2 col-md-6 p-2">
                         <label for="first_name">First Name <span class="red-required">*</span></label>
@@ -66,7 +67,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-                let userId = "";
+            let userId = getUserId();
 
                 function fetchUserData(userId){
                     fetch('http://127.0.0.1:8000/api/users/' + userId)
@@ -89,9 +90,8 @@
                     });
                 }
 
-                // to check if editing
-                if(window.location.pathname.includes('/edit')){
-                    userId = window.location.pathname.split('/').pop();
+                // fetch user id
+                if(userId){
                     fetchUserData(userId);
                 }
 
@@ -107,18 +107,19 @@
                 let email = document.getElementById('email').value;
                 let password = document.getElementById('password').value;
 
-                fetch('http://127.0.0.1:8000/api/users/${userId}', {
+                let formBody = {
+                    firstname: firstname,
+                    middlename: middlename,
+                    lastname: lastname,
+                    address: address,
+                    phone: phone,
+                    email: email,
+                    password: password
+                };
+
+                fetch('http://127.0.0.1:8000/api/users/' + userId, {
                     method: 'PUT',
-                    body: 
-                    JSON.stringify({
-                        firstname: firstname,
-                        middlename: middlename,
-                        lastname: lastname,
-                        address: address,
-                        phone: phone,
-                        email: email,
-                        password: password
-                    }),
+                    body: JSON.stringify(formBody),
                     headers:{
                         Accept: 'application/json',
                         'Content-Type': 'application/json',
@@ -137,8 +138,24 @@
                         messageDiv.innerHTML = res.message;
                         messageDiv.style.display = 'block';
                     }
+                }).catch(error => {
+                    console.error('Error:', error);
                 });
             });
+
+            function getUserId(){
+                let userId = document.getElementById('user_id').value;
+                if(!userId){
+                    let userId = localStorage.getItem('user_id');
+                }
+                if(!userId){
+                    let messageDiv = document.getElementById('message');
+                        messageDiv.innerHTML = console.log('User ID Not Found in Local Storage');
+                        messageDiv.style.display = 'block';
+                  
+                }
+                return userId;
+            }
         });
     </script>
 @endsection
