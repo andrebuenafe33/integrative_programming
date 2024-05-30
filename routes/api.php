@@ -21,7 +21,7 @@ Route::post('login', [UserController::class, 'login']);
 
 // Route::middleware('auth:api')->group(function(){ 
 
-    // User //
+// User //
 Route::get('/userList', [UserController::class, 'list']);
 Route::post('/register', [UserController::class, 'createUser']);
 Route::get('/users/{id}', [UserController::class, 'getUserById']);
