@@ -56,7 +56,7 @@
                     .then(res => {
                         if(res.status){
                             let user = res.user;
-
+                            document.getElementById('profile_image').src = user.profile_image;
                             document.getElementById('first_name').textContent = user.first_name;
                             document.getElementById('middle_name').textContent = user.middle_name;
                             document.getElementById('last_name').textContent = user.last_name;

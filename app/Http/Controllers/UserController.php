@@ -169,6 +169,7 @@ class UserController extends Controller
                     'address' => 'required',
                     'phone' => 'required',
                     'email' => 'required|email|unique:users,email',
+                    'profile_image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
                     'password' => 'required',
 
 
@@ -190,6 +191,7 @@ class UserController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'profile_image' => $request->profile_image,
                 'password' => Hash::make($request->password),
 
 
@@ -222,6 +224,7 @@ class UserController extends Controller
                     'address' => 'required',
                     'phone' => 'required',
                     'email' => 'required|email|unique:users,email,'.$user->id,
+                    'profile_image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048'.$user->id,
                     'password' => 'required',
                 ]
             );
@@ -241,6 +244,7 @@ class UserController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'profile_image' => $request->profile_image,
                 'password' => Hash::make($request->password),
             ]);
 
