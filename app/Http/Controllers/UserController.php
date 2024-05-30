@@ -159,6 +159,19 @@ class UserController extends Controller
 
     public function profile()
     {
+        // if(!auth()->check()){
+        //     // return redirect()->route('home');
+        //     return response(['error' => 'Unauthenticated!'], 401);
+        // }
+
+        // $user = auth()->user();
+
+        // if(!user){
+        //     return response(['error' => 'User Not Found!'], 404);
+        // }
+
+        // $token = $user->createToken("API TOKEN")->plainTextToken;
+
         return view('admin.users.profile.index');
     }
 
@@ -189,6 +202,14 @@ class UserController extends Controller
                     'errors' => $validateUser->errors()
                 ], 401);
             }
+            
+            // Handle profile image upload
+            $filename = null;
+            if ($request->hasFile('profile_image')) {
+                $image = $request->file('profile_image');
+                $filename = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $filename); 
+            }
 
             $user = User::create([
                 'first_name' => $request->firstname,
@@ -197,7 +218,7 @@ class UserController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'email' => $request->email,
-                'profile_image' => $request->profile_image,
+                'profile_image' => $filename,
                 'password' => Hash::make($request->password),
 
 

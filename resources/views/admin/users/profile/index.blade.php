@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <input type="hidden" id="user_id" name="user_id" value="">
+                    <input type="hidden" id="user_id" name="user_id" value="1">
                     <div class="row">
                         <div class="col-md-6">
                             <strong>First Name:</strong><h6 id="first_name"></h6>
@@ -77,7 +77,7 @@
                 }
 
             function getUserId(){
-                let userId = document.getElementById('user_id').value = user.id;
+                let userId = document.getElementById('user_id').value;
                 if(!userId){
                     let userId = localStorage.getItem('user_id');
                 }
