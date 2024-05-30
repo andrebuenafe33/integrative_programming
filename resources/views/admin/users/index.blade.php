@@ -35,10 +35,6 @@
         </div>
     </div>
 
-    <script>
-        let table = new DataTable('#UsersTable');
-    </script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function(){
     
@@ -64,8 +60,8 @@
                         "<td>" + res[i].phone + "</td>" +
                         "<td>" + res[i].email + "</td>" +
                         "<td>" + 
-                            "<a href="/users/edit" class='editUser btn btn-warning btn-sm' title='Edit Button'><i class='fa fa-solid fa-edit'>Edit</i></a>" +
-                            "<a class='deleteUser btn btn-danger btn-sm' title='Delete Button' ><i class='fa fa-solid fa-trash'>Delete</i></a>" +
+                            `<a href="/users/${res[i].id}/edit" class='editUser btn btn-warning btn-sm' title='Edit Button'><i class='fa fa-solid fa-edit'></i> Edit</a> ` +
+                            "<a class='deleteUser btn btn-danger btn-sm' title='Delete Button' ><i class='fa fa-solid fa-trash'></i> Delete</a>" +
                         "</td>" +
                     "</tr>";
                     document.getElementById('usersTable').innerHTML += row;

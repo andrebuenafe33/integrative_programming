@@ -71,9 +71,9 @@
                 function fetchUserData(userId){
                     fetch('http://127.0.0.1:8000/api/users/${userId}/edit')
                     .then(res => res.json())
-                    .then(data => {
-                        if(data.status){
-                            let user = data.user;
+                    .then(res => {
+                        if(res.status){
+                            let user = res.user;
 
                             document.getElementById('first_name').value = user.first_name;
                             document.getElementById('middle_name').value = user.middle_name;
@@ -82,7 +82,7 @@
                             document.getElementById('phone').value = user.phone;
                             document.getElementById('email').value = user.email;
                         } else {
-                            console.error(data.message);
+                            console.error(res.message);
                         }
                     }).catch(error => {
                         console.error('Error:', error);
@@ -91,12 +91,11 @@
 
                 // to check if editing
                 if(window.location.pathname.includes('/edit')){
-                    userId = window.location.pathname.spit('/').pop();
+                    userId = window.location.pathname.split('/').pop();
                     fetchUserData(userId);
                 }
 
                 // form submit
-
             document.querySelector('.users-form').addEventListener('submit', function(event) {
                 event.preventDefault();
 

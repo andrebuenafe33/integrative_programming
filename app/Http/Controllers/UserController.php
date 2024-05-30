@@ -259,19 +259,9 @@ class UserController extends Controller
         }
     }
 
-    public function editUser($id)
+    public function edit($id)
     {
-        try {
-            $user = User::findOrFail($id);
-            return response()->json([
-                'status' => true,
-                'user' => $user,
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
     }
 }

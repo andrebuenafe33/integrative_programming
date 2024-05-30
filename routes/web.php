@@ -13,6 +13,7 @@ Route::get('/', function () {
 
 Route::get('users', [UserController::class, 'index'])->name('users');
 Route::get('users/create', [UserController::class, 'create']);
+Route::get('users/{id}/edit', [UserController::class, 'edit']);
 
 // Route::get('register', [RegisterController::class, 'register'])->name('register');
 
