@@ -47,7 +47,7 @@ class UserController extends Controller
             if (!Auth::attempt($request->only(['email', 'password']))) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Invalid credentials',
+                    'message' => 'Invalid credentials!',
                 ], 401);
             
 
@@ -60,7 +60,7 @@ class UserController extends Controller
                 }
             if(!Hash::check($request->password, $user->password)){
                 return response()->json([
-                    'message' => 'Invalid Credentials',
+                    'message' => 'Invalid Credentials!',
                 ], 404);
                 $code = rand(100000, 99999);
                 $updateResult = $user->update([
@@ -68,11 +68,11 @@ class UserController extends Controller
                 ]);
 
                 // Semaphore //
-                Http::asForm()->post('https://api.semaphore.co/api/v4/messages', [
-                    'apikey' => env('SEMAPHORE_API_KEY'),
-                    'number' => '09945364846',
-                    'message' => 'This is you OTP Code'.$code,
-                ]);
+                // Http::asForm()->post('https://api.semaphore.co/api/v4/messages', [
+                //     'apikey' => env('SEMAPHORE_API_KEY'),
+                //     'number' => '09945364846',
+                //     'message' => 'This is you OTP Code'.$code,
+                // ]);
                 // End of Semaphore // 
 
                 if($updateResult){
@@ -91,15 +91,12 @@ class UserController extends Controller
                 }
             }
 
-            // $token = auth()->user()->createToken('/login');
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'User logged in successfully',
-            //     'token' => $token->accessToken,
-            //     'redirect' => route('dashboard'), // this redirect to admin dashboard
-            //     // 'mail' =>  Mail::to('admin@example.com')
-            //     //         ->send(new UserSenderMail())
-            // ], 200);
+            $token = auth()->user()->createToken('token');
+            return response()->json([
+                'status' => true,
+                'message' => 'User Authenticated successfully',
+                'token' => $token->accessToken,
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -115,7 +112,7 @@ class UserController extends Controller
                 'otp_code' => 'required|digits:6'
             ]);
 
-            if($validateOTP->failes()){
+            if($validateOTP->fails()){
                 return response()->json([
                     'status' => false,
                     'message' => 'Validation Error!',

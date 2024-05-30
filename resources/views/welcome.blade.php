@@ -78,8 +78,9 @@
     </div>
 
     {{-- OTP Verification --}}
-    <div class="container-sm" id="otp-container">
-        <div class="card col-md-4 mt-5" style="margin: 0 auto; display:none;">
+    <div class="container-sm hidden" id="otp-container">
+        <div class="card col-md-4 mt-5" style="margin: 0 auto;">
+            <div class="card-body">
                 <h3 id="otpmessage">Enter OTP</h3>
                 <form id="otp-form">
                     <div class="form-group">
@@ -90,8 +91,9 @@
                     <div id="otp-message" class="text-danger mb-3 hidden">
                         Invalid OTP!
                     </div>
-                    <button type="submit" class="form-button btn btn-primary cold-md-12">Verify OTP</button>
+                    <button type="submit" class="btn-sm btn btn-primary cold-md-12">Verify OTP</button>
                 </form>
+            </div>
         </div>
     </div>
     {{-- End of OTP Verification --}}
@@ -113,27 +115,33 @@
                     headers: {
                         Accept: 'application/json',
                         'Content-Type': 'application/json',
-                        Authorization: 'Bearer' + localStorage.getItem('token')
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
                     },
 
                 }).then(res => {
+                    // if(!res.ok){
+                    //     throw new Error('Network response was not okay');
+                    // }
                     console.log(res);
                     return res.json();
                 }).then(res => {
                     console.log(res);
-                    if (res.status) {
-                        localStorage.setItem('token', 'res.token');
+                    if (res && res.status) {
+                        localStorage.setItem('token', res.token);
                         document.getElementById('otp-container').style.display = 'block';
                         document.getElementById('login-container').style.display = 'none';
                         // window.location.href = res.redirect;
                         // console.log(res.mail);
                     } else {
                         let messageDiv = document.getElementById('message');
-                        messageDiv.innerHTML = res.message;
+                        messageDiv.innerHTML = res.message || 'Unknown error';
                         messageDiv.style.display = 'block';
                     }
-                })
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
             });
+
             document.getElementById('otp-form').addEventListener('submit', function(event){
                 event.preventDefault();
 
@@ -151,12 +159,12 @@
                 }).then(res => {
                     console.log(res);
                     return res.json();
-                }).then(data => {
-                    if(data.message == 'OTP Verified Sucessfully!'){
-                        window.location.href = data.redirect;
+                }).then(res => {
+                    if(res.message == 'OTP Verified Successfully!'){
+                        window.location.href = res.redirect;
                     } else {
                         let messageOTP = document.getElementById('otp-message');
-                        messageOTP.innerHTML = data.message
+                        messageOTP.innerHTML = res.message
                         messageOTP.style.display = 'block';
                     }
                 })
