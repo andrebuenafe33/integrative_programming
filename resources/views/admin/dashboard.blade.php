@@ -8,7 +8,9 @@
     <title>Laravel Project UI</title>
 
     <link rel="stylesheet" href="{{ asset('css/dropify.css') }}" />
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/pusher.css') }}" />
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
     <!-- Fonts -->
@@ -31,25 +33,6 @@
 </head>
 
 <body class="antialiased">
-    {{-- <nav>
-        <ul>
-            <li><a href="#" id="users-link">Users</a></li>
-            <li><a href="#" id="about-link">About</a></li>
-        </ul>
-    </nav>
-    <aside>
-        <ul>
-            <li><a href="#" id="profile-link">Profile</a></li>
-            <li><a href="#" id="settings-link">Settings</a></li>
-            <li><a href="#" id="logout-link">Logout</a></li>
-        </ul>
-    </aside>
-    <div class="container">
-        <h1 id="page-title">Dashboard</h1>
-        <div id="content">
-            <!-- Content goes here -->
-        </div>
-    </div> --}}
 
     <nav class="navbar navbar-expand-lg bg-dark static-top">
         <div class="container-fluid">
@@ -101,6 +84,15 @@
                     <a href="/users" class="sidebar-link">
                         <i class="fa fa-solid fa-user "></i>
                         <span>Users</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="/pusher" class="sidebar-link">
+                        <i class="fa fa-solid fa-user "></i>
+                        <span>Pusher</span>
                     </a>
                 </li>
             </ul>
