@@ -65,7 +65,6 @@
             </li>
 
     </nav>
-
     <div class="wrapper">
         <aside id="sidebar">
             <div class="d-flex">
@@ -76,9 +75,7 @@
                     <a href="/dashboard">Dashboard</a>
                 </div>
             </div>
-
             <hr class="sidebar-divider">
-
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
                     <a href="/users" class="sidebar-link">
@@ -87,16 +84,14 @@
                     </a>
                 </li>
             </ul>
-
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
                     <a href="/pusher" class="sidebar-link">
-                        <i class="fa fa-solid fa-user "></i>
+                        <i class="fa fa-brands fa-rocketchat"></i>
                         <span>Pusher</span>
                     </a>
                 </li>
             </ul>
-
         </aside>
 
         {{-- Content --}}
@@ -111,8 +106,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 text-center text-sm-start mx-auto" style="color: white">
                     &copy; <a href="https://www.facebook.com/andre.buenafe.33/"><strong>Andre Website</strong></a>, All
-                    Right Reserved
-                    2024.
+                    Right Reserved 2024.
                 </div>
             </div>
         </div>
