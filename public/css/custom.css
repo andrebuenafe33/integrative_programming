@@ -1,0 +1,22 @@
+#login-page {
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+.red-required {
+    color: red;
+    margin-left: 5px;
+}
+
+.required-message {
+    display: none;
+    color: red;
+    font-size: 0.8em;
+}
+
+.form-control:focus + .required-message {
+    display: block;
+}
+
+#navbar {
+    background: linear-gradient(to right, white, black, red);
+}
