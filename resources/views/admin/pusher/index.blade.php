@@ -8,7 +8,7 @@
     <div class="card-body">
         <div class="messages">
             @include('admin.pusher.receive', ['message' => "Hey! What's up!  👋"])
-            @include('admin.pusher.receive', ['message' => "Ask a friend to open this link and you can chat with them!"])
+            @include('admin.pusher.receive', ['message' => "Waragud!"])
         </div>
         <div class="bottom">
             <form>
