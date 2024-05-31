@@ -14,8 +14,8 @@ Route::get('/', function () {
 Route::get('users', [UserController::class, 'index'])->name('users');
 Route::get('users/create', [UserController::class, 'create']);
 Route::get('users/{id}/edit', [UserController::class, 'edit']);
-
-// Route::get('register', [RegisterController::class, 'register'])->name('register');
+Route::get('/get/users/{id}', [UserController::class, 'getUserById']);
+Route::put('/update/users/{id}', [UserController::class, 'updateUser']);
 
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

@@ -9,7 +9,7 @@
             <div id="message" class="text-danger mb-3 hidden">
                 Creation Failed!
             </div>
-            <form data="formData" class="users-form">
+            <form data="formData" class="users-form" enctype="multipart/form-data">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="first_name">First Name <span class="red-required">*</span></label>

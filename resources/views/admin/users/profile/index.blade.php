@@ -1,6 +1,12 @@
 @extends('admin.dashboard')
 @section('content')
 
+<style>
+#profile_image {
+    max-width: 250px; /* Set maximum width */
+    max-height: 300px; /* Preserve aspect ratio */
+}
+</style>
 <div class="container mt-3">
     <div class="card">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -14,12 +20,12 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
-                    <div id="profile_image" class="p-5 m-5 text-center" style="border-radius: 50%; background-color: #f0f0f0;">
-                        <i class="fa fa-user fa-5x text-secondary"></i>
+                    <div class="text-right"> <!-- Align content to the right -->
+                        <img id="profile_image" class="profile-image" src="" alt="Profile Image" style="border-radius: 10%; background-color: #f0f0f0;">
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <input type="hidden" id="user_id" name="user_id" value="1">
+                    <input type="hidden" id="user_id" name="user_id" value="5">
                     <div class="row">
                         <div class="col-md-6">
                             <strong>First Name:</strong><h6 id="first_name"></h6>
@@ -43,6 +49,8 @@
                 </div>
             </div>
         </div>
+        
+        </div>
     </div>
 </div>
 
@@ -56,7 +64,10 @@
                     .then(res => {
                         if(res.status){
                             let user = res.user;
-                            document.getElementById('profile_image').src = user.profile_image;
+
+                            let profileImageElement = document.getElementById('profile_image');
+                            profileImageElement.src = `/images/${user.profile_image}`;
+                            profileImageElement.alt = `${user.first_name}'s Profile Image`;
                             document.getElementById('first_name').textContent = user.first_name;
                             document.getElementById('middle_name').textContent = user.middle_name;
                             document.getElementById('last_name').textContent = user.last_name;
@@ -82,9 +93,7 @@
                     let userId = localStorage.getItem('user_id');
                 }
                 if(!userId){
-                    let messageDiv = document.getElementById('message');
-                        messageDiv.innerHTML = console.log('User ID Not Found in Local Storage');
-                        messageDiv.style.display = 'block';
+                    console.log('User ID Not Found in Local Storage or In Input');
                   
                 }
                 return userId;
