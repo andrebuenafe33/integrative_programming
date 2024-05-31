@@ -80,24 +80,38 @@
     {{-- OTP Verification --}}
     <div class="container-sm hidden" id="otp-container">
         <div class="card col-md-4 mt-5" style="margin: 0 auto;">
+            <div class="card-header">
+                <h1 class="text-center">
+                    <li class="fa-solid fa-user me-2"></li>Login
+                </h1>
+            </div>
             <div class="card-body">
                 <h3 id="otpmessage">Enter OTP</h3>
                 <form id="otp-form">
                     <div class="form-group">
                         <label for="otp_code" class="form-label">OTP<span class="red-required">*</span></label>
-                        <input type="number" class="form-input" name="otp_code" id="otp_code" placeholder="Enter OTP Code" required>
+                        <input type="text" class="form-input" name="otp_code" id="otp_code" placeholder="Enter OTP Code" required>
                         <div class="required-message">This field is required!</div>
                     </div>
                     <div id="otp-message" class="text-danger mb-3 hidden">
                         Invalid OTP!
                     </div>
-                    <button type="submit" class="btn-sm btn btn-primary cold-md-12">Verify OTP</button>
+                    <button type="submit" class="btn-sm btn btn-primary cold-md-12 mt-2">Verify OTP</button>
                 </form>
             </div>
         </div>
     </div>
     {{-- End of OTP Verification --}}
 
+    <script>
+        document.getElementById('otp_code').addEventListener('input', function(event) {
+            let input = event.target;
+            let value = input.value;
+            if (value.length > 6) {
+                input.value = value.slice(0, 6); 
+            }
+        });    
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.login-form').addEventListener('submit', function(event) {

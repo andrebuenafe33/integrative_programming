@@ -38,6 +38,26 @@
         </div>
     </div>
 
+        {{-- Delete Confirmation Modal --}}
+      <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body"> Are you sure you want to delete this user?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger btn-sm" id="confirmDelete">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
 <script>
     document.addEventListener('DOMContentLoaded', function(){
     
@@ -72,10 +92,41 @@
         })
         
         // Eventlistener for Delete Button
+        // document.getElementById('usersTable').addEventListener('click', function(event) {
+        //     if (event.target.classList.contains('deleteUser')) { // mao ni kung mo loading na gani ang usersTable tapos naay contains deleteUser, means the button if mu reload ang page automatic ma detect niya ang button
+        //         let userId = event.target.dataset.userId;
+        //         if (confirm('Are you sure you want to delete this user?')) {
+        //             fetch(`http://127.0.0.1:8000/api/delete/users/${userId}`, {
+        //                 method: 'DELETE',
+        //                 headers: {
+        //                     Accept: 'application/json',
+        //                     'Content-Type': 'application/json',
+        //                     Authorization: 'Bearer ' + localStorage.getItem('token')
+        //                 }
+        //             })
+        //             .then(response => response.json())
+        //             .then(data => {
+        //                 if (data.status) {
+        //                     console.log(data.message);
+        //                     window.location.href = data.reload;
+        //                 } else {
+        //                     let errorMessage = document.getElementById('confirm-message');
+        //                     errorMessage.innerHTML = data.message;
+        //                     errorMessage.style.display = 'block';
+        //                     console.error(data.message);
+        //                 }
+        //             })
+        //             .catch(error => {
+        //                 console.error('Error:', error);
+        //             });
+        //         }
+        //     }
+        // });
         document.getElementById('usersTable').addEventListener('click', function(event) {
             if (event.target.classList.contains('deleteUser')) { // mao ni kung mo loading na gani ang usersTable tapos naay contains deleteUser, means the button if mu reload ang page automatic ma detect niya ang button
                 let userId = event.target.dataset.userId;
-                if (confirm('Are you sure you want to delete this user?')) {
+                $('#deleteConfirmationModal').modal('show');
+                document.getElementById('confirmDelete').addEventListener('click', function() {
                     fetch(`http://127.0.0.1:8000/api/delete/users/${userId}`, {
                         method: 'DELETE',
                         headers: {
@@ -99,7 +150,7 @@
                     .catch(error => {
                         console.error('Error:', error);
                     });
-                }
+                });
             }
         });
     

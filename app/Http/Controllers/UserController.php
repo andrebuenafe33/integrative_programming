@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use App\Mail\UserSenderMail;
 
 class UserController extends Controller
@@ -35,7 +36,7 @@ class UserController extends Controller
                     'password' => 'required'
                 ]
             );
-
+            
             if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
@@ -49,55 +50,57 @@ class UserController extends Controller
                     'status' => false,
                     'message' => 'Invalid credentials!',
                 ], 401);
-            
-
             }
+            
             $user = User::where('email', $request->email)->first();
-                if(empty($user)){
-                    return response()->json([
-                        'message' => '404 not found',
-                    ], 404);
-                }
-            if(!Hash::check($request->password, $user->password)){
+            // Log user retrieval and ID
+            Log::info('User retrieved:', ['email' => $request->email, 'user_id' => $user->id]);
+
+            if (empty($user)) {
+                return response()->json([
+                    'message' => '404 not found',
+                ], 404);
+            }
+
+            if (!Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'message' => 'Invalid Credentials!',
-                ], 404);
-                $code = rand(100000, 99999);
-                $updateResult = $user->update([
-                    'opt_code' => $code,
-                ]);
-
-                // Semaphore //
-                // Http::asForm()->post('https://api.semaphore.co/api/v4/messages', [
-                //     'apikey' => env('SEMAPHORE_API_KEY'),
-                //     'number' => '09945364846',
-                //     'message' => 'This is you OTP Code'.$code,
-                // ]);
-                // End of Semaphore // 
-
-                if($updateResult){
-                    return response()->json([
-                        'status' => true,
-                        'message' => 'OTP Sent Successfully!',
-                        'code' => $code,
-                        'token' => $user->createToken("API TOKEN")->plainTextToken,
-                        'mail' =>  Mail::to('admin@example.com')->send(new UserSenderMail())  // Mailtrap Email // 
-                    ], 200);
-                } else {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Failed to Send OTP',
-                    ], 500);
-                }
+                ], 401);
             }
+           
+            // Generate OTP and update the user
+            $otp = rand(100000, 999999);
+            $updateResult = $user->update([
+                'otp_code' => $otp,
+            ]);
 
-            $token = auth()->user()->createToken('token');
-            return response()->json([
-                'status' => true,
-                'message' => 'User Authenticated successfully',
-                'token' => $token->accessToken,
-            ], 200);
+            // Send OTP via Semaphore
+            $response = Http::asForm()->post('https://api.semaphore.co/api/v4/messages', [
+                'apikey' => env('SEMAPHORE_API_KEY'),
+                'number' => $user->phone, 
+                'message' => 'This is your OTP Code: ' . $otp,
+            ]);
+
+            Log::info('Semaphore Response: ', $response->json());
+
+            if ($response->successful()) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'OTP Sent Successfully!',
+                    'otp_code' => $otp,
+                    'token' => $user->createToken("API TOKEN")->plainTextToken,
+                    'number' => $user->phone,
+                    'user' => $user
+                    // 'mail' =>  Mail::to('admin@example.com')->send(new UserSenderMail())  // Mailtrap Email //
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Failed to Send OTP',
+                ], 500);
+            }
         } catch (\Throwable $th) {
+            Log::error('Exception occurred during login:', ['message' => $th->getMessage()]);
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
@@ -109,33 +112,36 @@ class UserController extends Controller
     {
         try {
             $validateOTP = Validator::make($request->all(), [
-                'otp_code' => 'required|digits:6'
+                'otp_code' => 'required|digits:6' 
             ]);
-
+    
             if($validateOTP->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'Validation Error!',
+                    'message' => 'Validation error',
                     'errors' => $validateOTP->errors()
                 ], 401);
             }
-
+    
+           
             $user = User::where('otp_code', $request->otp_code)->first();
-            if(!$user){
+    
+            if (!$user) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Invalid OTP',
                 ], 401);
             }
-
+    
+            
             $user->update(['otp_code' => null]);
+    
             return response()->json([
                 'status' => true,
                 'message' => 'OTP Verified Successfully!',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'redirect' => route('dashboard')
             ], 200);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -169,6 +175,7 @@ class UserController extends Controller
                     'address' => 'required',
                     'phone' => 'required',
                     'email' => 'required|email|unique:users,email',
+                    'profile_image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
                     'password' => 'required',
 
 
@@ -190,6 +197,7 @@ class UserController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'profile_image' => $request->profile_image,
                 'password' => Hash::make($request->password),
 
 
@@ -222,6 +230,7 @@ class UserController extends Controller
                     'address' => 'required',
                     'phone' => 'required',
                     'email' => 'required|email|unique:users,email,'.$user->id,
+                    'profile_image' => 'image|mimes:jpg,jpeg,png,gif|max:2048'.$user->id,
                     'password' => 'required',
                 ]
             );
@@ -241,6 +250,7 @@ class UserController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'profile_image' => $request->profile_image,
                 'password' => Hash::make($request->password),
             ]);
 
