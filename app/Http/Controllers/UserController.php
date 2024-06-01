@@ -91,7 +91,7 @@ class UserController extends Controller
                     'token' => $user->createToken("API TOKEN")->plainTextToken,
                     'number' => $user->phone,
                     'user' => $user
-                    // 'mail' =>  Mail::to('admin@example.com')->send(new UserSenderMail())  // Mailtrap Email //
+                    // 'mail' =>  Mail::to('andre@example.com')->send(new UserSenderMail())  // Mailtrap Email //
                 ], 200);
             } else {
                 return response()->json([

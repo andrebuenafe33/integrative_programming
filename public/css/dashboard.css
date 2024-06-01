@@ -46,11 +46,11 @@ i:hover{
 
 #sidebar {
     width: 70px;
-    height: 100svh;
+    height: 120svh;
     min-width: 70px;
     z-index: 1000;
     transition: all .25s ease-in-out;
-    background: linear-gradient(to right, black, red);
+    background: linear-gradient(to right, black, red, black);
     display: flex;
     flex-direction: column;
 }
@@ -103,8 +103,7 @@ i:hover{
 }
 
 .sidebar-nav {
-    padding: 2rem 0;
-    flex: 1 1 auto;
+    padding:10px 0;
 }
 
 a.sidebar-link {
@@ -139,7 +138,7 @@ a.sidebar-link:hover {
     position: absolute;
     top: 0;
     left: 70px;
-    background: linear-gradient(to right, black, red);
+    background: linear-gradient(to right, black, red, black);
     padding: 0;
     min-width: 15rem;
     display: none;
@@ -172,7 +171,7 @@ a.sidebar-link:hover {
 
 .navbar {
     /* background-color: #f5f5f5; */
-    background: linear-gradient(to right, black, red, white, violet);
+    background: linear-gradient(to right, black, red);
     box-shadow: 0 0 2rem 0 rgba(33, 37, 41, .1);
 }
 
@@ -186,13 +185,8 @@ a.sidebar-link:hover {
 }
 
 .footer {
-    background: linear-gradient(to right, black, red, white, violet);
+    background: linear-gradient(to right, black, red, black);
+    padding: 1rem 0;
+    overflow-x: auto;
 }
 
-
-@media (min-width: 768px) {}
-
-/* .sidebar-divider{
- width: 5px;
- background-color: black;   
-} */
