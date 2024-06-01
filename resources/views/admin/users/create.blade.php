@@ -9,7 +9,7 @@
             <div id="message" class="text-danger mb-3 hidden">
                 Creation Failed!
             </div>
-            <form data="formData" class="users-form">
+            <form data="formData" class="users-form" enctype="multipart/form-data">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="first_name">First Name <span class="red-required">*</span></label>
@@ -79,29 +79,26 @@
             document.querySelector('.users-form').addEventListener('submit', function(event) {
                 event.preventDefault();
 
-                let firstname = document.getElementById('first_name').value
-                let middlename = document.getElementById('middle_name').value
-                let lastname = document.getElementById('last_name').value
-                let address = document.getElementById('address').value
-                let phone = document.getElementById('phone').value
-                let email = document.getElementById('email').value
-                let password = document.getElementById('password').value
+                let formData = new FormData();
+
+                formData.append('firstname', document.getElementById('first_name').value);
+                formData.append('middlename', document.getElementById('middle_name').value);
+                formData.append('lastname', document.getElementById('last_name').value);
+                formData.append('address', document.getElementById('address').value);
+                formData.append('phone', document.getElementById('phone').value);
+                formData.append('email', document.getElementById('email').value);
+                formData.append('password', document.getElementById('password').value);
+
+                let profileImageInput = document.getElementById('profile_image');
+                if (profileImageInput.files.length > 0) {
+                    formData.append('profile_image', profileImageInput.files[0]);
+                }
 
                 fetch('http://127.0.0.1:8000/api/register', {
                     method: 'POST',
-                    body:
-                    JSON.stringify({
-                        firstname: firstname,
-                        middlename: middlename,
-                        lastname: lastname,
-                        address: address,
-                        phone: phone,
-                        email: email,
-                        password: password,
-                    }),
+                    body:formData,
                     headers: {
                         Accept: 'application/json',
-                        'Content-Type': 'application/json',
                         Authorization: 'Bearer ' + localStorage.getItem('token')
                     },
 
@@ -111,7 +108,7 @@
                 }).then(res => {
                     console.log(res);
                     if (res.status) {
-                        localStorage.setItem('token', 'res.token');
+                        localStorage.setItem('token', res.token);
                         window.location.href = res.redirect;
                     } else {
                         let messageDiv = document.getElementById('message');

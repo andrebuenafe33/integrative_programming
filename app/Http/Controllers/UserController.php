@@ -159,6 +159,19 @@ class UserController extends Controller
 
     public function profile()
     {
+        // if(!auth()->check()){
+        //     // return redirect()->route('home');
+        //     return response(['error' => 'Unauthenticated!'], 401);
+        // }
+
+        // $user = auth()->user();
+
+        // if(!user){
+        //     return response(['error' => 'User Not Found!'], 404);
+        // }
+
+        // $token = $user->createToken("API TOKEN")->plainTextToken;
+
         return view('admin.users.profile.index');
     }
 
@@ -189,6 +202,14 @@ class UserController extends Controller
                     'errors' => $validateUser->errors()
                 ], 401);
             }
+            
+            // Handle profile image upload
+            $filename = null;
+            if ($request->hasFile('profile_image')) {
+                $image = $request->file('profile_image');
+                $filename = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $filename); 
+            }
 
             $user = User::create([
                 'first_name' => $request->firstname,
@@ -197,7 +218,7 @@ class UserController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'email' => $request->email,
-                'profile_image' => $request->profile_image,
+                'profile_image' => $filename,
                 'password' => Hash::make($request->password),
 
 
@@ -230,7 +251,6 @@ class UserController extends Controller
                     'address' => 'required',
                     'phone' => 'required',
                     'email' => 'required|email|unique:users,email,'.$user->id,
-                    'profile_image' => 'image|mimes:jpg,jpeg,png,gif|max:2048'.$user->id,
                     'password' => 'required',
                 ]
             );
@@ -250,7 +270,6 @@ class UserController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'email' => $request->email,
-                'profile_image' => $request->profile_image,
                 'password' => Hash::make($request->password),
             ]);
 
@@ -268,7 +287,22 @@ class UserController extends Controller
             ], 500);
         }
     }
+    // // Handle profile image upload if there's a new image
+    // $filename = $user->profile_image;
+    // if ($request->hasFile('profile_image')) {
+    //     $image = $request->file('profile_image');
+    //     $filename = time() . '_' . $image->getClientOriginalName();
+    //     $image->move(public_path('images'), $filename);
+    //     // Delete old image if exists
+    //     if ($user->profile_image) {
+    //         // Check if the file exists before attempting to delete it
+    //         if (file_exists(public_path('images/' . $user->profile_image))) {
+    //             unlink(public_path('images/' . $user->profile_image));
+    //         }
+    //     }
+    // }
 
+    
     public function edit($id)
     {
         $user = User::findOrFail($id);

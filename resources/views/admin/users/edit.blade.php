@@ -54,10 +54,10 @@
                             placeholder="Password...">
                         <div class="required-message">This field is required.</div>
                     </div>
-                    <div class="form-group mb-2 col-md-6">
+                    {{-- <div class="form-group mb-2 col-md-6">
                         <label for="profile_image">Profile Image</label>
-                        <input type="file" class="dropify form-control" id="profile_image" name="profile_image">
-                    </div>
+                        <input type="file" class="dropify" id="profile_image" name="profile_image">
+                    </div> --}}
                 </div>
         </div>
         <div class="card-footer">
@@ -127,7 +127,7 @@
                     password: password
                 };
 
-                fetch('http://127.0.0.1:8000/api/users/' + userId, {
+                fetch('http://127.0.0.1:8000/api/update/users/' + userId, {
                     method: 'PUT',
                     body: JSON.stringify(formBody),
                     headers:{
