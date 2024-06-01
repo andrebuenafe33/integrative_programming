@@ -20,8 +20,10 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="text-right"> <!-- Align content to the right -->
-                        <img id="profile_image" class="profile-image" src="" alt="Profile Image" style="border-radius: 10%; background-color: #f0f0f0;">
+                    <div class="text-right"> 
+                        <a href="" data-lightbox="lightbox-img" id="profile-image" data-title="My Profile"> 
+                            <img id="profile_image" class="profile-image" src="" alt="Profile Image" style="border-radius: 10%; background-color: #f0f0f0;">
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -68,6 +70,12 @@
                             let profileImageElement = document.getElementById('profile_image');
                             profileImageElement.src = `/images/${user.profile_image}`;
                             profileImageElement.alt = `${user.first_name}'s Profile Image`;
+                            let profileImageLink = document.getElementById('profile-image');
+                            profileImageLink.href = `/images/${user.profile_image}`;
+
+                            // let profileImageElement = document.getElementById('profile_image');
+                            // profileImageElement.src = `/images/${user.profile_image}`;
+                            // profileImageElement.alt = `${user.first_name}'s Profile Image`;
                             document.getElementById('first_name').textContent = user.first_name;
                             document.getElementById('middle_name').textContent = user.middle_name;
                             document.getElementById('last_name').textContent = user.last_name;
