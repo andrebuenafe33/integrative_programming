@@ -48,7 +48,7 @@
 
                 <a class="nav-link dropdown-toggle" style="text-decoration: none; color:black;" href="#"
                     id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="mr-2 d-none d-lg-inline text-white-900 small">Admin</span>
+                    <span id="user-name" class="mr-2 d-none d-lg-inline text-white-900 small"></span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -121,6 +121,19 @@
        }
     </script>
     <script>
+        fetch('http://127.0.0.1:8000/api/user', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(user => {
+            document.getElementById('user-name').textContent = user.first_name;
+        });
+    </script>
+    <script>
         // Dropify initialization
         $(".dropify").dropify({
             messages: {
@@ -131,9 +144,6 @@
             },
         });    
     </script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>   --}}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>

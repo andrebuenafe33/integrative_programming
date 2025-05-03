@@ -108,7 +108,6 @@
                 }).then(res => {
                     console.log(res);
                     if (res.status) {
-                        localStorage.setItem('token', res.token);
                         window.location.href = res.redirect;
                     } else {
                         let messageDiv = document.getElementById('message');

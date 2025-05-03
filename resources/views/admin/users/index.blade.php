@@ -59,69 +59,50 @@
     
 
 <script>
-    document.addEventListener('DOMContentLoaded', function(){
-    
-    
+     function getCurrentUser() {
+            return fetch('http://127.0.0.1:8000/api/user', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                }
+            }).then(res => res.json());
+        }
+
+    document.addEventListener('DOMContentLoaded', async function(){
+        const currentUser = await getCurrentUser(); // Get logged-in user
+       
+
+
         fetch('http://127.0.0.1:8000/api/userList', {
             method: 'GET',
-            headers:{
+            headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             },
-        }).then((res)=>{
-            console.log(res);
-            return res.json();
-        }).then(res => {
-            console.log(res);
-            for(var i=0; i< res.length; i++){
-                var row = "<tr>" +
-                        "<td>" + res[i].first_name + "</td>" +
-                        "<td>" + res[i].middle_name + "</td>" +
-                        "<td>" + res[i].last_name + "</td>" +
-                        "<td>" + res[i].address + "</td>" +
-                        "<td>" + res[i].phone + "</td>" +
-                        "<td>" + res[i].email + "</td>" +
-                        "<td>" + 
-                            `<a href="/users/${res[i].id}/edit" class='editUser btn btn-warning btn-sm' title='Edit Button'><i class='fa fa-solid fa-edit'></i> Edit</a> ` +
-                            `<a class='deleteUser btn btn-danger btn-sm' data-user-id='${res[i].id}'  title='Delete Button' ><i class='fa fa-solid fa-trash'></i> Delete</a>` +
-                        "</td>" +
-                    "</tr>";
-                    document.getElementById('usersTable').innerHTML += row;
+        }).then(res => res.json())
+        .then(users => {
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].id === currentUser.id) continue;
+
+                const row = "<tr>" +
+                    "<td>" + users[i].first_name + "</td>" +
+                    "<td>" + users[i].middle_name + "</td>" +
+                    "<td>" + users[i].last_name + "</td>" +
+                    "<td>" + users[i].address + "</td>" +
+                    "<td>" + users[i].phone + "</td>" +
+                    "<td>" + users[i].email + "</td>" +
+                    "<td>" +
+                        `<a href="/users/${users[i].id}/edit" class='editUser btn btn-warning btn-sm' title='Edit Button'><i class='fa fa-solid fa-edit'></i> Edit</a> ` +
+                        `<a class='deleteUser btn btn-danger btn-sm' data-user-id='${users[i].id}' title='Delete Button'><i class='fa fa-solid fa-trash'></i> Delete</a>` +
+                    "</td>" +
+                "</tr>";
+                document.getElementById('usersTable').innerHTML += row;
             }
         })
         
-        // Eventlistener for Delete Button
-        // document.getElementById('usersTable').addEventListener('click', function(event) {
-        //     if (event.target.classList.contains('deleteUser')) { // mao ni kung mo loading na gani ang usersTable tapos naay contains deleteUser, means the button if mu reload ang page automatic ma detect niya ang button
-        //         let userId = event.target.dataset.userId;
-        //         if (confirm('Are you sure you want to delete this user?')) {
-        //             fetch(`http://127.0.0.1:8000/api/delete/users/${userId}`, {
-        //                 method: 'DELETE',
-        //                 headers: {
-        //                     Accept: 'application/json',
-        //                     'Content-Type': 'application/json',
-        //                     Authorization: 'Bearer ' + localStorage.getItem('token')
-        //                 }
-        //             })
-        //             .then(response => response.json())
-        //             .then(data => {
-        //                 if (data.status) {
-        //                     console.log(data.message);
-        //                     window.location.href = data.reload;
-        //                 } else {
-        //                     let errorMessage = document.getElementById('confirm-message');
-        //                     errorMessage.innerHTML = data.message;
-        //                     errorMessage.style.display = 'block';
-        //                     console.error(data.message);
-        //                 }
-        //             })
-        //             .catch(error => {
-        //                 console.error('Error:', error);
-        //             });
-        //         }
-        //     }
-        // });
         document.getElementById('usersTable').addEventListener('click', function(event) {
             if (event.target.classList.contains('deleteUser')) { // mao ni kung mo loading na gani ang usersTable tapos naay contains deleteUser, means the button if mu reload ang page automatic ma detect niya ang button
                 let userId = event.target.dataset.userId;

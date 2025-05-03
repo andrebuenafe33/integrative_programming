@@ -152,11 +152,14 @@ class UserController extends Controller
 
     public function list()
     {
-        $users = User::all();
-
-        return response()->json($users);
+        try {
+            $users = User::all();
+            return response()->json($users);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-
+    
     public function profile()
     {
         // if(!auth()->check()){
@@ -178,39 +181,34 @@ class UserController extends Controller
     public function createUser(Request $request)
     {
         try {
-
-            $validateUser = Validator::make(
-                $request->all(),
-                [
-                    'firstname' => 'required',
-                    'lastname' => 'required',
-                    'middlename' => 'required',
-                    'address' => 'required',
-                    'phone' => 'required',
-                    'email' => 'required|email|unique:users,email',
-                    'profile_image' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
-                    'password' => 'required',
-
-
-                ]
-            );
-
+            $validateUser = Validator::make($request->all(), [
+                'firstname' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'middlename' => 'required|string|max:255',
+                'address' => 'required|string',
+                'phone' => 'required|string|max:20',
+                'email' => 'required|email|unique:users,email',
+                'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+                'password' => 'required|string|min:6',
+            ]);
+    
             if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Create Failed!',
                     'errors' => $validateUser->errors()
-                ], 401);
+                ], 422); // 422 is more appropriate for validation errors
             }
-            
+    
             // Handle profile image upload
             $filename = null;
             if ($request->hasFile('profile_image')) {
                 $image = $request->file('profile_image');
                 $filename = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('images'), $filename); 
+                $image->move(public_path('images'), $filename);
             }
-
+    
+            // Create user
             $user = User::create([
                 'first_name' => $request->firstname,
                 'last_name' => $request->lastname,
@@ -220,66 +218,101 @@ class UserController extends Controller
                 'email' => $request->email,
                 'profile_image' => $filename,
                 'password' => Hash::make($request->password),
-
-
             ]);
-
+    
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'redirect' => route('users'),
-            ], 200);
+                'user' => $user,
+            ], 201); // 201 Created
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
+                'message' => 'Server Error: ' . $th->getMessage()
             ], 500);
         }
     }
+    
 
     public function updateUser(Request $request, $id)
     {
         try {
             $user = User::findOrFail($id);
-            $validateUser = Validator::make(
-                $request->all(),
-                [
-                    'firstname' => 'required',
-                    'lastname' => 'required',
-                    'middlename' => 'required',
-                    'address' => 'required',
-                    'phone' => 'required',
-                    'email' => 'required|email|unique:users,email,'.$user->id,
-                    'password' => 'required',
-                ]
-            );
-
-            if($validateUser->fails()){
+    
+            $validateUser = Validator::make($request->all(), [
+                'firstname' => 'nullable|string|max:255',
+                'lastname' => 'nullable|string|max:255',
+                'middlename' => 'nullable|string|max:255',
+                'address' => 'nullable|string',
+                'phone' => 'nullable|string|max:20',
+                'email' => 'nullable|email|unique:users,email,' . $user->id,
+                'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:10048',
+                'password' => 'nullable|string|min:6',
+            ]);
+    
+            if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Update Failed!',
                     'errors' => $validateUser->errors()
                 ], 422);
             }
-
-            $user->update([
-                'first_name' => $request->firstname,
-                'last_name' => $request->lastname,
-                'middle_name' => $request->middlename,
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-
+    
+            $updateData = [];
+    
+            if ($request->filled('firstname')) {
+                $updateData['first_name'] = $request->firstname;
+            }
+    
+            if ($request->filled('lastname')) {
+                $updateData['last_name'] = $request->lastname;
+            }
+    
+            if ($request->filled('middlename')) {
+                $updateData['middle_name'] = $request->middlename;
+            }
+    
+            if ($request->filled('address')) {
+                $updateData['address'] = $request->address;
+            }
+    
+            if ($request->filled('phone')) {
+                $updateData['phone'] = $request->phone;
+            }
+    
+            if ($request->filled('email')) {
+                $updateData['email'] = $request->email;
+            }
+    
+            if ($request->filled('password')) {
+                $updateData['password'] = Hash::make($request->password);
+            }
+    
+            // Handle profile image upload
+            if ($request->hasFile('profile_image')) {
+                $image = $request->file('profile_image');
+                $filename = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images'), $filename);
+    
+                // Delete old image if exists
+                if ($user->profile_image && file_exists(public_path('images/' . $user->profile_image))) {
+                    unlink(public_path('images/' . $user->profile_image));
+                }
+    
+                $updateData['profile_image'] = $filename;
+            }
+    
+            // Apply updates
+            $user->update($updateData);
+    
             return response()->json([
                 'status' => true,
                 'message' => 'User Updated Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'redirect' => route('users'),
                 'user' => $user
             ], 200);
+    
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -287,6 +320,7 @@ class UserController extends Controller
             ], 500);
         }
     }
+    
     // // Handle profile image upload if there's a new image
     // $filename = $user->profile_image;
     // if ($request->hasFile('profile_image')) {

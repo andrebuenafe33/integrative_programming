@@ -18,17 +18,21 @@ use App\Models\User;
 
 
 Route::post('/login', [UserController::class, 'login']);
+Route::post('/verifyOTP', [UserController::class, 'verifyOTP']);
 
-// Route::middleware('auth:api')->group(function(){ 
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
+
+Route::middleware('auth:sanctum')->group(function(){ 
+    
 // User //
 Route::get('/userList', [UserController::class, 'list']);
 Route::post('/register', [UserController::class, 'createUser']);
 Route::get('/get/users/{id}', [UserController::class, 'getUserById']);
 Route::put('/update/users/{id}', [UserController::class, 'updateUser']);
+Route::post('/update/users/{id}', [UserController::class, 'updateUser']);
 Route::delete('/delete/users/{id}', [UserController::class, 'deleteUser']);
 
-Route::post('/verifyOTP', [UserController::class, 'verifyOTP']);
-
-
-// });
+});

@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <input type="hidden" id="user_id" name="user_id" value="5">
+                    <input type="hidden" id="user_id" name="user_id" value="1">
                     <div class="row">
                         <div class="col-md-6">
                             <strong>First Name:</strong><h6 id="first_name"></h6>
@@ -58,56 +58,37 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-            let userId = getUserId();
-
-                function fetchUserData(userId){
-                    fetch('http://127.0.0.1:8000/api/get/users/' + userId)
-                    .then(res => res.json())
-                    .then(res => {
-                        if(res.status){
-                            let user = res.user;
-
-                            let profileImageElement = document.getElementById('profile_image');
-                            profileImageElement.src = `/images/${user.profile_image}`;
-                            profileImageElement.alt = `${user.first_name}'s Profile Image`;
-                            let profileImageLink = document.getElementById('profile-image');
-                            profileImageLink.href = `/images/${user.profile_image}`;
-
-                            // let profileImageElement = document.getElementById('profile_image');
-                            // profileImageElement.src = `/images/${user.profile_image}`;
-                            // profileImageElement.alt = `${user.first_name}'s Profile Image`;
-                            document.getElementById('first_name').textContent = user.first_name;
-                            document.getElementById('middle_name').textContent = user.middle_name;
-                            document.getElementById('last_name').textContent = user.last_name;
-                            document.getElementById('address').textContent = user.address;
-                            document.getElementById('phone').textContent = user.phone;
-                            document.getElementById('email').textContent = user.email;
-                        } else {
-                            console.error(res.message);
-                        }
-                    }).catch(error => {
-                        console.error('Error:', error);
-                    });
+            fetch('http://127.0.0.1:8000/api/user', {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
                 }
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(user => {
+                document.getElementById('first_name').textContent = user.first_name;
+                document.getElementById('middle_name').textContent = user.middle_name;
+                document.getElementById('last_name').textContent = user.last_name;
+                document.getElementById('address').textContent = user.address;
+                document.getElementById('phone').textContent = user.phone;
+                document.getElementById('email').textContent = user.email;
 
-                // fetch user id
-                if(userId){
-                    fetchUserData(userId);
-                }
+                let profileImageElement = document.getElementById('profile_image');
+                profileImageElement.src = `/images/${user.profile_image}`;
+                profileImageElement.alt = `${user.first_name}'s Profile Image`;
+                document.getElementById('profile-image').href = `/images/${user.profile_image}`;
+            })
+            .catch(error => {
+                console.error('Error fetching user:', error);
+            });
 
-            function getUserId(){
-                let userId = document.getElementById('user_id').value;
-                if(!userId){
-                    let userId = localStorage.getItem('user_id');
-                }
-                if(!userId){
-                    console.log('User ID Not Found in Local Storage or In Input');
-                  
-                }
-                return userId;
-            }
-             // Set user_id input value
-            document.getElementById('user_id').value = getUserId();
         });
 </script>
 
