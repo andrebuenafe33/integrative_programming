@@ -25,6 +25,7 @@ class AdminSeeder extends Seeder
             'address' => 'Brgy.Kangha-as',
             'phone' => '09107590281',
             'email' => 'Admin@example.com',
+            'role' => '1',
             'otp_code' => '225492',
             'email_verified_at' => now(),
             'password' => Hash::make('admin231'),

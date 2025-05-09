@@ -12,6 +12,10 @@
             <form id="formData" class="users-form" enctype="multipart/form-data">
                 <input type="hidden" id="user_id" name="user_id" value="">
                 <div class="row">
+                    <div class="form-group mb-2 col-md-6">
+                        <label for="profile_image">Profile Image</label>
+                        <input type="file" class="dropify" id="profile_image" name="profile_image">
+                    </div>
                     <div class="form-group col-md-6">
                         <label for="first_name">First Name</label>
                         <input type="text" class="form-control" id="first_name" name="first_name" 
@@ -38,18 +42,33 @@
                             value="{{ old('phone') }}" placeholder="Phone Number...">
                     </div>
                     <div class="form-group col-md-6">
+                            <label for="inputEmail4">Course</label>
+                            <select name="course" id="course" class="custom-select">
+                                @if (isset($courses))
+                                <option value="" disabled {{ old('course_id') ? '' : 'selected' }}>Select Course</option>
+                                    @foreach ($courses as $course)
+                                    <option value="{{ $course->id }}">{{ $course->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="email">Email</label>
                         <input type="email" class="form-control" id="email" name="email" 
                             value="{{ old('email') }}" placeholder="Email...">
+                    </div>
+                     <div class="form-group col-md-6">
+                            <label for="inputEmail4">Role</label>
+                            <select name="role" id="role" class="form-control">
+                                <option value="" disabled {{ old('role') ? '' : 'selected' }}>Select a Role</option>
+                                <option value="1">Administrator</option>
+                                <option value="2">Student</option>
+                            </select>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" 
                             placeholder="Password...">
-                    </div>
-                    <div class="form-group mb-2 col-md-6">
-                        <label for="profile_image">Profile Image</label>
-                        <input type="file" class="dropify" id="profile_image" name="profile_image">
                     </div> 
                 </div>
         </div>
@@ -89,7 +108,9 @@
                 formData.append('lastname', document.getElementById('last_name').value);
                 formData.append('address', document.getElementById('address').value);
                 formData.append('phone', document.getElementById('phone').value);
+                formData.append('role', document.getElementById('role').value);
                 formData.append('email', document.getElementById('email').value);
+                formData.append('course', document.getElementById('course').value);
                 formData.append('password', document.getElementById('password').value);
 
                 let profileImageInput = document.getElementById('profile_image');
@@ -139,7 +160,9 @@
                         document.getElementById('last_name').value = user.last_name;
                         document.getElementById('address').value = user.address;
                         document.getElementById('phone').value = user.phone;
+                        document.getElementById('role').value = user.role;
                         document.getElementById('email').value = user.email;
+                        document.getElementById('course').value = user.course_id;
                     } else {
                         console.error(res.message);
                     }
