@@ -11,6 +11,10 @@
             </div>
             <form data="formData" class="users-form" enctype="multipart/form-data">
                 <div class="row">
+                    <div class="form-group mb-2 col-md-6">
+                        <label for="profile_image">Profile Image</label>
+                        <input type="file" class="dropify form-control" id="profile_image" name="profile_image">
+                    </div>
                     <div class="form-group col-md-6">
                         <label for="first_name">First Name <span class="red-required">*</span></label>
                         <input type="text" class="form-control" id="first_name" name="first_name" required
@@ -42,20 +46,35 @@
                         <div class="required-message">This field is required.</div>
                     </div>
                     <div class="form-group col-md-6">
+                            <label for="inputEmail4">Course</label>
+                            <select name="course" id="course" class="custom-select">
+                                @if (isset($courses))
+                                <option value="" selected disabled>Select Course</option>
+                                    @foreach ($courses as $course)
+                                    <option value="{{ $course->id }}">{{ $course->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="email">Email <span class="red-required">*</span></label>
                         <input type="email" class="form-control" id="email" name="email" required
                             value="{{ old('email') }}" placeholder="Email...">
                         <div class="required-message">This field is required.</div>
                     </div>
                     <div class="form-group col-md-6">
+                            <label for="inputEmail4">Role</label>
+                            <select name="role" id="role" class="form-control">
+                                <option value="" selected disabled>Select a Role</option>
+                                <option value="1">Administrator</option>
+                                <option value="2">Student</option>
+                            </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="password">Password <span class="red-required">*</span></label>
                         <input type="password" class="form-control" id="password" name="password" required
                             placeholder="Password...">
                         <div class="required-message">This field is required.</div>
-                    </div>
-                    <div class="form-group mb-2 col-md-6">
-                        <label for="profile_image">Profile Image</label>
-                        <input type="file" class="dropify form-control" id="profile_image" name="profile_image">
                     </div> 
                 </div>
         </div>
@@ -86,6 +105,8 @@
                 formData.append('lastname', document.getElementById('last_name').value);
                 formData.append('address', document.getElementById('address').value);
                 formData.append('phone', document.getElementById('phone').value);
+                formData.append('role', document.getElementById('role').value);
+                formData.append('course', document.getElementById('course').value);
                 formData.append('email', document.getElementById('email').value);
                 formData.append('password', document.getElementById('password').value);
 

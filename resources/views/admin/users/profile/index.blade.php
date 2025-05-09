@@ -29,6 +29,11 @@
                 <div class="col-md-8">
                     <input type="hidden" id="user_id" name="user_id" value="1">
                     <div class="row">
+
+                        <div class="col-md-6">
+                            <strong>Role:</strong><h6 id="role"></h6>
+                        </div>
+
                         <div class="col-md-6">
                             <strong>First Name:</strong><h6 id="first_name"></h6>
                         </div>
@@ -49,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>
         
         </div>
@@ -73,6 +78,7 @@
                 return res.json();
             })
             .then(user => {
+                document.getElementById('role').textContent = user.role?.name ?? 'Unknown';
                 document.getElementById('first_name').textContent = user.first_name;
                 document.getElementById('middle_name').textContent = user.middle_name;
                 document.getElementById('last_name').textContent = user.last_name;

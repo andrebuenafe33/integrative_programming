@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Course;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +24,8 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        $courses = Course::all();
+        return view('admin.users.create')->with('courses', $courses);
     }
 
     public function login(Request $request)
@@ -75,15 +77,15 @@ class UserController extends Controller
             ]);
 
             // Send OTP via Semaphore
-            $response = Http::asForm()->post('https://api.semaphore.co/api/v4/messages', [
-                'apikey' => env('SEMAPHORE_API_KEY'),
-                'number' => $user->phone, 
-                'message' => 'This is your OTP Code: ' . $otp,
-            ]);
+            // $response = Http::asForm()->post('https://api.semaphore.co/api/v4/messages', [
+            //     'apikey' => env('SEMAPHORE_API_KEY'),
+            //     'number' => $user->phone, 
+            //     'message' => 'This is your OTP Code: ' . $otp,
+            // ]);
 
-            Log::info('Semaphore Response: ', $response->json());
+            // Log::info('Semaphore Response: ', $response->json());
 
-            if ($response->successful()) {
+            // if ($response->successful()) {
                 return response()->json([
                     'status' => true,
                     'message' => 'OTP Sent Successfully!',
@@ -93,12 +95,12 @@ class UserController extends Controller
                     'user' => $user
                     // 'mail' =>  Mail::to('andre@example.com')->send(new UserSenderMail())  // Mailtrap Email //
                 ], 200);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Failed to Send OTP',
-                ], 500);
-            }
+            // } else {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => 'Failed to Send OTP',
+            //     ], 500);
+            // }
         } catch (\Throwable $th) {
             Log::error('Exception occurred during login:', ['message' => $th->getMessage()]);
             return response()->json([
@@ -187,6 +189,8 @@ class UserController extends Controller
                 'middlename' => 'required|string|max:255',
                 'address' => 'required|string',
                 'phone' => 'required|string|max:20',
+                'role' => 'required|string|max:2',
+                'course' => 'required|exists:courses,id',
                 'email' => 'required|email|unique:users,email',
                 'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
                 'password' => 'required|string|min:6',
@@ -211,10 +215,12 @@ class UserController extends Controller
             // Create user
             $user = User::create([
                 'first_name' => $request->firstname,
-                'last_name' => $request->lastname,
+                'last_name' => $request->lastname,  
                 'middle_name' => $request->middlename,
                 'address' => $request->address,
                 'phone' => $request->phone,
+                'role' => $request->role,
+                'course_id' => $request->course,
                 'email' => $request->email,
                 'profile_image' => $filename,
                 'password' => Hash::make($request->password),
@@ -247,6 +253,8 @@ class UserController extends Controller
                 'address' => 'nullable|string',
                 'phone' => 'nullable|string|max:20',
                 'email' => 'nullable|email|unique:users,email,' . $user->id,
+                'role' => 'nullable|exists:roles,id',
+                'course' => 'nullable|exists:courses,id',
                 'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:10048',
                 'password' => 'nullable|string|min:6',
             ]);
@@ -284,7 +292,14 @@ class UserController extends Controller
             if ($request->filled('email')) {
                 $updateData['email'] = $request->email;
             }
-    
+            
+            if ($request->filled('role')) {
+                $updateData['role'] = $request->role;
+            }
+
+            if ($request->filled('course')) {
+                $updateData['course_id'] = $request->course;
+            }
             if ($request->filled('password')) {
                 $updateData['password'] = Hash::make($request->password);
             }
@@ -339,8 +354,13 @@ class UserController extends Controller
     
     public function edit($id)
     {
+        $courses = Course::all();
+
         $user = User::findOrFail($id);
-        return view('admin.users.edit', compact('user'));
+        return view('admin.users.edit')->with([
+            'courses' => $courses,
+            'user' => $user
+        ]);
     }
 
     public function getUserById($id)

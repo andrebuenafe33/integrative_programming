@@ -21,13 +21,15 @@
                     <caption>Users Table</caption>
                     <thead>
                         <tr>
-                            <th>First Name</th>
-                            <th>Middle Name</th>
-                            <th>Last Name</th>
-                            <th>Phone Number</th>
-                            <th>Address</th>
-                            <th>Email</th>
-                            <th>Action</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Middle Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Phone Number</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody id="usersTable">
@@ -87,6 +89,44 @@
             for (let i = 0; i < users.length; i++) {
                 if (users[i].id === currentUser.id) continue;
 
+                // Mapping using switch case //
+                let roleName = '';
+                switch(users[i].role){
+                    case '1':
+                        case 1:
+                            roleName = 'Administrator';
+                            break;
+                    case '2':
+                        case 2:
+                            roleName = 'Student';
+                            break;
+                    default:
+                            roleName = 'Unknown';
+                }
+
+                // Course 
+                let courseName = '';
+                switch(users[i].course_id){
+                    case '1':
+                        case 1:
+                            courseName = 'BSIT';
+                            break;
+                    case '2':
+                        case 2:
+                            courseName = 'BEED';
+                            break;
+                    case '3':
+                        case 3:
+                            courseName = 'BSED';
+                            break;
+                    case '4':
+                        case 4:
+                            courseName = 'BSED-Math';
+                            break;
+                    default:
+                            courseName = 'Unknown';
+                }
+
                 const row = "<tr>" +
                     "<td>" + users[i].first_name + "</td>" +
                     "<td>" + users[i].middle_name + "</td>" +
@@ -94,6 +134,8 @@
                     "<td>" + users[i].address + "</td>" +
                     "<td>" + users[i].phone + "</td>" +
                     "<td>" + users[i].email + "</td>" +
+                    "<td><span class='badge " + (roleName === 'Administrator' ? 'badge-primary' : 'badge-warning') + "'>" + roleName + "</span></td>" +
+                    "<td>" + courseName + "</td>" +
                     "<td>" +
                         `<a href="/users/${users[i].id}/edit" class='editUser btn btn-warning btn-sm' title='Edit Button'><i class='fa fa-solid fa-edit'></i> Edit</a> ` +
                         `<a class='deleteUser btn btn-danger btn-sm' data-user-id='${users[i].id}' title='Delete Button'><i class='fa fa-solid fa-trash'></i> Delete</a>` +
